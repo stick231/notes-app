@@ -4,7 +4,7 @@ namespace Repository;
 Use Entities\Database;
 use Entities\User;
 
-class UserRepository implements UserRepositoryInterface{
+class UserRepository{
     private $pdo;
 
     public function __construct(Database $database) {

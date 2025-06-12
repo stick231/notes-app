@@ -6,7 +6,7 @@ use Entities\AbstractNote;
 use Entities\Note;
 use Entities\Reminder;
 
-class NoteRepository implements NoteRepositoryInterface{
+class NoteRepository{
     private $pdo;
 
     public function __construct(Database $database) {
@@ -16,7 +16,7 @@ class NoteRepository implements NoteRepositoryInterface{
     public function create(AbstractNote $abstractNote)
     {
         try{
-            $query = "INSERT INTO note (title, content, time, reminder_time, user_id) VALUES (?, ?, ?, ?, ?)";
+            $query = "INSERT INTO notes (title, content, reminder_time, user_id) VALUES (?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($query);
 
             $reminderTime = null;
@@ -28,7 +28,6 @@ class NoteRepository implements NoteRepositoryInterface{
             $params = array(
                 $abstractNote->getTitle(),
                 $abstractNote->getContent(),
-                date('Y-m-d H:i:s'),
                 $reminderTime instanceof \DateTime ? $reminderTime->format('Y-m-d H:i:s') : $reminderTime,
                 $_COOKIE['auth_user_id']
             );
@@ -57,7 +56,7 @@ class NoteRepository implements NoteRepositoryInterface{
     {   
         try{
             if ($note->getId() !== null) {
-                $query = "SELECT * FROM note WHERE id = :id AND user_id = :user_id";
+                $query = "SELECT * FROM notes WHERE id = :id AND user_id = :user_id";
 
                 $stmt = $this->pdo->prepare($query);
                 $idParam = $note->getId() ;
@@ -67,7 +66,7 @@ class NoteRepository implements NoteRepositoryInterface{
                 $stmt->bindParam(':user_id', $userIdParams, \PDO::PARAM_INT);
             } 
             elseif($note->getSearch() !== null){
-                $query = "SELECT * FROM note WHERE reminder_time IS NULL AND (title LIKE :search OR content LIKE :search OR time LIKE :search) AND user_id = :user_id";
+                $query = "SELECT * FROM notes WHERE reminder_time IS NULL AND (title LIKE :search OR content LIKE :search) AND user_id = :user_id";
 
                 $stmt = $this->pdo->prepare($query);
     
@@ -100,7 +99,7 @@ class NoteRepository implements NoteRepositoryInterface{
     {   
         try{
             if ($reminder->getId() !== null) {
-                $query = "SELECT * FROM note WHERE id = :id AND user_id = :user_id";
+                $query = "SELECT * FROM notes WHERE id = :id AND user_id = :user_id";
 
                 $stmt = $this->pdo->prepare($query);
                 $idParam = $reminder->getId() ;
@@ -143,7 +142,7 @@ class NoteRepository implements NoteRepositoryInterface{
     public function delete(AbstractNote $abstractNote)
     {   
         try{
-            $query = "DELETE FROM note WHERE id = ?";
+            $query = "DELETE FROM notes WHERE id = ?";
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(1, $abstractNote->getId(), \PDO::PARAM_INT);
             if ($stmt->execute()) {
@@ -181,7 +180,7 @@ class NoteRepository implements NoteRepositoryInterface{
                 $expired = 0;
             }
     
-            $query = "UPDATE note SET title = ?, content = ?, last_update = ?, reminder_time = ?, expired = ? WHERE id = ?";
+            $query = "UPDATE notes SET title = ?, content = ?, last_update = ?, reminder_time = ?, expired = ? WHERE id = ?";
             $stmt = $this->pdo->prepare($query);
             $params = array(
                 $abstractNote->getTitle(),
