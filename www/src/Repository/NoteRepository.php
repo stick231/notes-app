@@ -109,7 +109,7 @@ class NoteRepository{
                 $stmt->bindParam(':user_id', $userIdParams, \PDO::PARAM_INT);
             } 
             elseif($reminder->getSearch() !== null){
-                $query = "SELECT * FROM note WHERE reminder_time IS NOT NULL AND (title LIKE :search OR content LIKE :search OR reminder_time LIKE :search) AND user_id = :user_id";
+                $query = "SELECT * FROM notes WHERE reminder_time IS NOT NULL AND (title LIKE :search OR content LIKE :search OR reminder_time LIKE :search) AND user_id = :user_id";
 
                 $stmt = $this->pdo->prepare($query);
     
@@ -120,7 +120,7 @@ class NoteRepository{
                 $stmt->bindParam(':user_id', $userIdParams, \PDO::PARAM_INT);
             }
             else {
-                $query = "SELECT * FROM note WHERE reminder_time IS NOT NULL AND user_id = :user_id";
+                $query = "SELECT * FROM notes WHERE reminder_time IS NOT NULL AND user_id = :user_id";
                 $stmt = $this->pdo->prepare($query);
 
                 $userIdParams = $_COOKIE['auth_user_id'];
@@ -222,7 +222,7 @@ class NoteRepository{
             $expired = filter_var($expired, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $idExpired = $reminder->getId();
 
-            $query = "UPDATE note SET expired = ? WHERE id = ?";
+            $query = "UPDATE notes SET expired = ? WHERE id = ?";
 
 
             $stmt = $this->pdo->prepare($query);

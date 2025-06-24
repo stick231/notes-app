@@ -108,7 +108,7 @@ $router->post('/reminders', function() use ($noteRepository, $noteFactory){
 
 $router->get('/notes', function() use ($noteRepository){
     $authMiddleware = new AuthMiddleware();    
-    // $authMiddleware->handle($_REQUEST, function() use ($noteRepository) {
+    $authMiddleware->handle($_REQUEST, function() use ($noteRepository) {
         if (isset($_GET['editData'])) {
                 $noteWithId = (new Note())->setId($_GET['editData']);
                 echo $noteRepository->readNote($noteWithId);
@@ -117,12 +117,12 @@ $router->get('/notes', function() use ($noteRepository){
         else{
             require_once "src/Views/main_page.php";
         }
-    // });
+    });
 });
 
 $router->get('/reminders', function() use ($noteRepository) {
     $authMiddleware = new AuthMiddleware();    
-    // $authMiddleware->handle($_REQUEST, function() use ($noteRepository) {
+    $authMiddleware->handle($_REQUEST, function() use ($noteRepository) {
         if (isset($_GET['editData'])) {
             $reminderWithId = (new Reminder())->setId($_GET['editData']);
             echo $noteRepository->readReminders($reminderWithId);
@@ -132,7 +132,7 @@ $router->get('/reminders', function() use ($noteRepository) {
             require_once "src/Views/main_page.php";
         }
     });
-// });
+});
 
 $dispatcher = new Phroute\Phroute\Dispatcher($router->getData());
 
