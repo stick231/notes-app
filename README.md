@@ -1,59 +1,60 @@
-# docker web server
+# Notes-App
 
-## Image versions
+Welcome to **Notes-App**!
 
-| Image Version | Base Image Version    | Nginx Version         | PHP Version   | Composer Ver | Nodejs Ver | NPM Ver  |
-|---------------|-----------------------|-----------------------|---------------|--------------|------------|----------|
-| 2.0.0         | Ubuntu 20.04          | 1.18.0                | 7.4.3         | 2.0.9        | 15.7.0     | 7.4.3    |
+This project helps you manage and organize your notes in an intuitive and scalable way. It leverages Docker for easy setup and includes a migration script to configure your environment.
 
+---
 
+## 📸 Project Screenshot
 
-List PHP modules:
-```
-[PHP Modules]
-amqp bcmath calendar Core ctype curl date  dom exif fileinfo filter ftp gd gettext gmp hash
-iconv intl json ldap libxml mbstring mcrypt mongodb mysqli mysqlnd openssl pcntl pcre PDO
-pdo_mysql Phar posix redis readline Reflection session shmop SimpleXML soap sockets SPL standard 
-sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl Zend OPcache zip zlib
-[Zend Modules]
-Zend OPcache
-```
-Addition:
+Below are some screenshots of the application, located in the `www/assets/screenshot/` directory.
 
-`git mc curl`
+| Main Screen                   | Reminder screen               | Registration                  |
+|-------------------------------|-------------------------------|-------------------------------|
+| ![Main Screenshot](www/assets/screenshot/main.png) | ![Reminder screen](www/assets/screenshot/reminders.png) | ![Registration](www/assets/screenshot/register.png) |
 
+## 🚀 Installation & Setup
 
-##### Simple run project 
-```
-docker run -d -p 8080:80 \
-      --rm \
-      -v $(pwd)/www/:/var/www/public/ \
-      --name docker-nginx-php-fpm \
-      lobsterk/web-nginx-php
-```
+Follow these commands to set up the project locally:
 
-##### Run project with docker compose 
-```     
-version: '3'
+```bash
+# Clone the repository
+git clone https://github.com/stick231/notes-app.git
 
-### Services
-services:
-  ### Web Server Container
-  web:
-    image: lobsterk/web-nginx-php
-    container_name: web
-    restart: always
-    ports:
-      - "8172:80"
-    volumes:
-      - ./www:/var/www/public
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./php-fpm/php.ini:/etc/php/7.4/fpm/php.ini
-      - ./php-fpm/php-fpm.conf:/etc/php/7.4/fpm/php-fpm.conf
+# Open project
+cd notes-app
 
+# Copy environment variables example to .env
+mv .env.example .env 
+
+# Build and run the containers in detached mode
+docker-compose up --build -d 
+
+# Run the migration script inside the container
+docker exec -it <container_name_or_id> php /var/www/migration.php
+# If use default settings run this command
+docker exec -it web php /var/www/migration.php
 ```
 
-##### Enter container bash
+---
 
-`docker exec -it test-docker /bin/bash`
+## 📝 Environment Variables
+
+- You must create a `.env` file based on `.env.example` and update it with your actual configuration.
+
+---
+
+## 💡 Contributing
+
+Feel free to fork the repo and submit pull requests!
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+**Happy accounting!**
