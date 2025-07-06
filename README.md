@@ -57,4 +57,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-**Happy accounting!**
+**Happy note‑taking!**
